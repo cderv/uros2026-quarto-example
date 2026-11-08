@@ -1,0 +1,292 @@
+---
+title: "Tourism in the European Union"
+subtitle: "Monthly bulletin of the Northbridge Statistical Office"
+author:
+  - name:
+      literal: Tourism Statistics Unit
+    affiliations:
+      - name: Northbridge Statistical Office
+date: today
+date-modified: last-modified
+license: "CC BY"
+copyright:
+  holder: Northbridge Statistical Office
+  year: 2026
+citation:
+  type: report
+  publisher: Northbridge Statistical Office
+  container-title: Monthly tourism bulletin
+  url: https://example.org/bulletins/tourism
+---
+
+```{r}
+#| label: setup
+library(eurostat)
+library(ggplot2)
+library(gt)
+library(scales)
+library(brand.yml)
+library(marquee)
+library(systemfonts)
+
+nights <- get_eurostat("tour_occ_nim",
+  filters = list(geo = "EU27_2020", unit = "NR",
+                 nace_r2 = "I551-I553", c_resid = "TOTAL"))
+nights <- na.omit(nights)
+latest <- nights[which.max(nights$time), ]
+year_ago <- nights[nights$time == seq(latest$time, by = "-1 year", length.out = 2)[2], ]
+change <- latest$values / year_ago$values - 1
+
+millions <- label_number(accuracy = 0.1, scale = 1e-6, suffix = " million")
+pct <- label_percent(accuracy = 0.1, style_positive = "plus")
+month <- format(latest$time, "%B %Y")
+
+# Colours of the five classes of change, from the institute's _brand.yml
+brand <- read_brand_yml()
+classes <- c("below -2" = "drop", "-2 to 0" = "dip", "0 to 2" = "flat",
+             "2 to 5" = "gain", "5 or more" = "surge")
+class_colours <- vapply(classes, brand_color_pluck, "", brand = brand)
+ink <- brand_color_pluck(brand, "foreground")
+slate <- brand_color_pluck(brand, "secondary")
+burgundy <- brand_color_pluck(brand, "primary")
+
+# Brand fonts for the figures: systemfonts reads them from ./fonts
+if (!dir.exists("fonts")) {
+  get_from_google_fonts("Source Sans 3", dir = "fonts")
+  get_from_google_fonts("Source Serif 4", dir = "fonts")
+}
+register_variant("Source Serif 4 SemiBold", "Source Serif 4", weight = "semibold")
+
+theme_nso <- function(base_size = 12) {
+  theme_minimal(base_size = base_size, base_family = "Source Sans 3") +
+    theme_brand_ggplot2(base_size = base_size) +
+    theme(
+      plot.title = element_marquee(family = "Source Serif 4 SemiBold", colour = ink,
+                                   size = rel(1.35), width = 1),
+      plot.subtitle = element_marquee(colour = slate, width = 1,
+                                      margin = margin(b = 10)),
+      plot.caption = element_text(colour = slate, hjust = 0, margin = margin(t = 10)),
+      plot.title.position = "plot", plot.caption.position = "plot",
+      panel.grid.major.x = element_blank(), panel.grid.minor = element_blank(),
+      axis.ticks = element_blank(),
+      legend.position = "top", legend.justification = "left"
+    )
+}
+
+# The headline of each figure is computed, like every other number
+this_year <- as.integer(format(latest$time, "%Y"))
+record <- latest$values == max(nights$values)
+trend_headline <- paste(month, if (record) "set a new record" else "stayed below the record")
+```
+
+::: {#kf-nights}
+[`r millions(latest$values)`]{style="font-size: 2.4em; font-weight: bold; color: #7a1f3d;"}
+
+nights spent at tourist accommodation in the EU in `r month`,
+[`r pct(change)`]{style="font-weight: bold;"} compared with a year earlier.
+
+Nights in the EU, `r month`
+:::
+
+::: {.column-margin}
+**Nights spent** count every night a guest stays in hotels, holiday
+accommodation and campsites (NACE I55.1 to I55.3), whatever the guest's
+country of residence.
+:::
+
+## The EU as a whole {#sec-eu}
+
+`r if (record) paste("No month on record had more nights than", month) else paste(month, "stayed below the record")`.
+@fig-trend compares this year with the four previous years;
+@sec-countries looks at each country and @sec-methods explains the figures.
+
+```{r}
+#| label: trend-data
+nights$year <- as.integer(format(nights$time, "%Y"))
+nights$month <- as.integer(format(nights$time, "%m"))
+past <- nights[nights$year %in% (this_year - 4):(this_year - 1), ]
+band <- aggregate(values ~ month, past, \(v) c(lo = min(v), hi = max(v)))
+band <- data.frame(month = band$month, band$values / 1e6)
+now <- nights[nights$year == this_year, ]
+last <- now[which.max(now$month), ]
+above <- sum(now$values / 1e6 > band$hi[match(now$month, band$month)])
+peak <- month.name[band$month[which.max(band$hi)]]
+# Alt text: chart type, axes, then the key pattern, all computed
+trend_alt <- paste0(
+  "Line chart. Months from January to December along the x-axis, nights spent ",
+  "at tourist accommodation in the EU in millions along the y-axis, from zero. ",
+  "A burgundy line for ", this_year, ", from January to ", month.name[last$month],
+  ", is drawn over a light band giving the lowest and highest value of each month ",
+  "from ", this_year - 4, " to ", this_year - 1, ". The ", this_year,
+  " line is above the band in ", above, " of its ", nrow(now), " months. ",
+  "Nights peak every year in ", peak, "; ", month, " is labelled with ",
+  millions(latest$values), ".")
+```
+
+```{r}
+#| label: fig-trend
+#| column: page-right
+#| out-width: 100%
+#| fig-width: !expr if (knitr::is_html_output()) 8.5 else 7
+#| fig-height: !expr if (knitr::is_html_output()) 4.2 else 3.8
+#| fig-cap: !expr trend_headline
+#| fig-alt: !expr trend_alt
+ggplot(mapping = aes(month)) +
+  geom_ribbon(data = band, aes(ymin = lo, ymax = hi), fill = class_colours[["0 to 2"]]) +
+  geom_line(data = now, aes(y = values / 1e6), colour = burgundy, linewidth = 1.2) +
+  geom_point(data = last, aes(y = values / 1e6), colour = burgundy, size = 3) +
+  geom_text(data = last, aes(y = values / 1e6, label = millions(values)),
+            hjust = -0.1, size = 4, fontface = "bold", colour = burgundy,
+            family = "Source Sans 3") +
+  scale_x_continuous(breaks = 1:12, labels = month.abb, expand = expansion(add = 0.3)) +
+  scale_y_continuous(labels = label_number(suffix = " m"), limits = c(0, NA),
+                     expand = expansion(mult = c(0, 0.08))) +
+  labs(subtitle = paste0("Nights spent at tourist accommodation in the EU: ",
+                         "{", burgundy, " **", this_year, "**} against the ",
+                         "{", class_colours[["5 or more"]], " **range of ",
+                         this_year - 4, "-", this_year - 1, "**}"),
+       caption = "Source: Eurostat (tour_occ_nim). 2021 and earlier left out (Covid-19).",
+       x = NULL, y = NULL) +
+  theme_nso()
+```
+
+## Countries {#sec-countries}
+
+```{r}
+#| label: countries-data
+geos <- c("EU27_2020", "IT", "FR", "ES", "DE", "EL", "HR", "NL", "AT")
+countries <- get_eurostat("tour_occ_nim",
+  filters = list(geo = geos, unit = "NR",
+                 nace_r2 = "I551-I553", c_resid = "TOTAL"))
+countries <- as.data.frame(countries[countries$time %in% c(year_ago$time, latest$time), ])
+tab <- reshape(countries[, c("geo", "time", "values")],
+               idvar = "geo", timevar = "time", direction = "wide")
+names(tab) <- c("Country", "before", "now")
+tab$change <- 100 * (tab$now / tab$before - 1)
+tab$Country <- label_eurostat(tab$Country, dic = "geo",
+                              custom_dic = c(EU27_2020 = "European Union"))
+tab <- tab[order(-tab$change), ]
+top <- tab[1, ]
+bottom <- tab[nrow(tab), ]
+```
+
+@tbl-countries ranks the largest destinations by their change over the year:
+`r top$Country` recorded the strongest change (`r pct(top$change / 100)`) and
+`r bottom$Country` the weakest (`r pct(bottom$change / 100)`).
+@fig-map shows every country with data.
+
+```{r}
+#| label: tbl-countries
+#| tbl-cap: "Nights spent at tourist accommodation by country, millions"
+#| classes: plain
+gt(tab) |>
+  fmt_number(columns = c(before, now), scale_by = 1e-6, decimals = 1) |>
+  fmt_number(columns = change, decimals = 1, force_sign = TRUE) |>
+  cols_label(before = format(year_ago$time, "%b %Y"),
+             now = format(latest$time, "%b %Y"),
+             change = "Change, %") |>
+  data_color(columns = change, method = "bin",
+             bins = c(-Inf, -2, 0, 2, 5, Inf), palette = unname(class_colours),
+             autocolor_text = FALSE) |>
+  tab_style(style = cell_text(color = "white"),
+            locations = cells_body(columns = change, rows = change < -2 | change >= 5)) |>
+  tab_style(style = list(cell_text(weight = "bold"),
+                         cell_borders(sides = c("top", "bottom"),
+                                      color = brand_color_pluck(brand, "primary"),
+                                      weight = px(2))),
+            locations = cells_body(rows = Country == "European Union")) |>
+  tab_source_note("Source: Eurostat (tour_occ_nim)") |>
+  theme_brand_gt() |>
+  opt_row_striping(row_striping = FALSE) |>
+  opt_table_font(font = "Source Sans 3")
+```
+
+```{r}
+#| label: map-data
+europe <- get_eurostat_geospatial(resolution = "20", nuts_level = 0, crs = "3035")
+all <- get_eurostat("tour_occ_nim",
+  filters = list(unit = "NR", nace_r2 = "I551-I553", c_resid = "TOTAL"))
+all <- as.data.frame(all[all$time %in% c(year_ago$time, latest$time), ])
+wide <- reshape(all[, c("geo", "time", "values")],
+                idvar = "geo", timevar = "time", direction = "wide")
+wide$change <- 100 * (wide[[3]] / wide[[2]] - 1)
+europe <- merge(europe, wide[, c("geo", "change")], by = "geo")
+europe <- europe[!is.na(europe$change) | europe$geo %in% eu_countries$code, ]
+europe$class <- cut(europe$change, breaks = c(-Inf, -2, 0, 2, 5, Inf),
+                    labels = names(class_colours))
+europe$class <- addNA(europe$class)
+levels(europe$class)[6] <- "no data"
+
+eu <- europe$geo %in% eu_countries$code
+rising <- sum(europe$change[eu] > 0, na.rm = TRUE)
+eu_change <- sf::st_drop_geometry(europe[eu & !is.na(europe$change), c("geo", "change")])
+up <- eu_change[which.max(eu_change$change), ]
+down <- eu_change[which.min(eu_change$change), ]
+geo_name <- function(code) label_eurostat(code, dic = "geo")
+map_alt <- paste0(
+  "Map of Europe. Each country is shaded by the change in nights spent at tourist ",
+  "accommodation between ", format(year_ago$time, "%B %Y"), " and ", month,
+  ", in five classes: below -2%, -2 to 0%, 0 to 2%, 2 to 5% and 5% or more, ",
+  "from dark burgundy for the strongest falls to dark gold for the strongest rises; ",
+  "countries without data are grey. In the EU, the largest rise is in ",
+  geo_name(up$geo), " (", pct(up$change / 100), ") and the largest fall in ",
+  geo_name(down$geo), " (", pct(down$change / 100), "). ",
+  "The EU as a whole changed by ", pct(change), ".")
+map_headline <- paste(rising, "of the", sum(eu), "EU countries recorded more nights than a year earlier")
+```
+
+```{r}
+#| label: fig-map
+#| fig-width: !expr if (knitr::is_html_output()) 7 else 5
+#| fig-height: !expr if (knitr::is_html_output()) 6.6 else 5
+#| fig-cap: !expr map_headline
+#| fig-alt: !expr map_alt
+ggplot(europe) +
+  geom_sf(aes(fill = class), colour = "white", linewidth = 0.25) +
+  annotate("label", x = 2.2e6, y = 3.1e6, hjust = 0, vjust = 1,
+           label = paste0("EU\n", pct(change)), family = "Source Sans 3",
+           fontface = "bold", size = 5, lineheight = 0.9, colour = burgundy,
+           fill = brand_color_pluck(brand, "light"), border.colour = NA) +
+  scale_fill_manual(values = c(class_colours, "no data" = "grey78"), name = NULL,
+                    guide = guide_legend(nrow = 1, label.position = "bottom",
+                                         keywidth = unit(14, "mm"),
+                                         keyheight = unit(3, "mm"))) +
+  coord_sf(xlim = c(2.1e6, 7.2e6), ylim = c(1.4e6, 5.35e6), datum = NA, expand = FALSE) +
+  labs(subtitle = paste("Change in nights spent at tourist accommodation,", month,
+                        "compared with", paste0(format(year_ago$time, "%B %Y"), ", %")),
+       caption = "Source: Eurostat (tour_occ_nim). Boundaries: (c) EuroGeographics.") +
+  theme_nso() +
+  theme(axis.text = element_blank(), panel.grid = element_blank())
+```
+
+## Methods and sources {#sec-methods}
+
+**Data.** All figures come from the Eurostat dataset *Nights spent at tourist
+accommodation establishments, monthly data* (`tour_occ_nim`), read with the R
+package eurostat when this bulletin was produced, on
+`r trimws(format(Sys.Date(), "%e %B %Y"))`. They cover hotels, holiday accommodation and
+campsites (NACE I55.1 to I55.3) and guests of every country of residence.
+Recent months are provisional and can be revised.
+
+**Comparisons.** Each month is compared with the same month a year earlier, which
+removes the seasonal pattern without any adjustment. In @fig-trend, the band shows
+the lowest and highest value of each month over `r this_year - 4` to
+`r this_year - 1`; earlier years are left out because of the Covid-19 pandemic.
+
+**Classes of change.** @tbl-countries and @fig-map share five classes of yearly
+change, in %: below -2, -2 to 0, 0 to 2, 2 to 5, and 5 or more.
+
+**Maps.** Country boundaries: GISCO, (c) EuroGeographics.
+
+## About this bulletin {.appendix .unnumbered}
+
+The Northbridge Statistical Office is a fictional institute, made up to show
+how a statistical bulletin can be produced with Quarto. The data are real.
+
+::: {.content-visible when-format="typst"}
+**Licence.** Text and figures are released under the Creative Commons
+Attribution 4.0 International licence (CC BY 4.0), unless noted otherwise.
+
+**Cite as.** Northbridge Statistical Office (2026). *Tourism in the European
+Union*. Monthly tourism bulletin. <https://example.org/bulletins/tourism>
+:::

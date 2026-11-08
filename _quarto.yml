@@ -1,0 +1,63 @@
+project:
+  output-dir: _output
+  resources:
+    - brand/nso-logo.svg
+
+format:
+  html:
+    theme: [brand, brand/nso.scss]
+    toc: true
+    toc-location: left
+    toc-title: Contents
+    title-block-banner: true
+    template-partials:
+      - brand/title-block.html
+    format-links:
+      - format: typst
+        text: PDF
+        icon: file-pdf
+      # One plain format name is needed, or Quarto adds every format again
+      - docx
+    embed-resources: false
+  typst:
+    knitr:
+      opts_chunk:
+        dev: svglite
+    include-in-header: brand/nso.typ
+    include-before-body: brand/nso-body.typ
+    papersize: a4
+    pdf-standard: [a-2b, ua-1]
+    toc: true
+    toc-depth: 1
+    toc-title: Contents
+    page-numbering: "1"
+    margin:
+      top: 2cm
+      bottom: 2cm
+    # Body on the left, notes in a wide right margin
+    margin-geometry:
+      inner: {far: 1.8cm, width: 0cm, separation: 0cm}
+      outer: {far: 1.2cm, width: 4.6cm, separation: 0.8cm}
+  docx: default
+
+crossref:
+  custom:
+    - kind: float
+      key: kf
+      reference-prefix: Key figure
+      caption-prefix: Key figure
+
+number-sections: true
+date-format: "D MMMM YYYY"
+
+fig-cap-location: top
+tbl-cap-location: top
+
+knitr:
+  opts_chunk:
+    dev: ragg_png
+
+execute:
+  echo: false
+  warning: false
+  message: false

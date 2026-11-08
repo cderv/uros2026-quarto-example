@@ -1,0 +1,31 @@
+/*-- scss:rules --*/
+// House style of the Northbridge Statistical Office (HTML)
+
+// Figure and table captions read as headlines
+.figure-caption, figcaption, caption {
+  font-family: "Source Serif 4", serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: $brand-burgundy;
+  text-align: left !important;
+}
+
+// Key figure: a stone box with a burgundy rule
+figure.quarto-float-kf {
+  background: $brand-stone;
+  border-left: 6px solid $brand-burgundy;
+  border-radius: 3px;
+  padding: 1rem 1.5rem;
+  p { text-align: left; }
+  p { margin-bottom: 0.4rem; }
+  figcaption { font-size: 1rem; margin-top: 0.6rem; }
+}
+
+// Title banner: stone band, horizontal logo above a burgundy rule
+.quarto-title-banner {
+  background: $brand-stone;
+  border-bottom: 3px solid $brand-burgundy;
+  .nso-logo { height: 52px; margin-bottom: 1.2rem; }
+  .title { color: $brand-burgundy; }
+  .subtitle { color: $brand-slate; }
+}

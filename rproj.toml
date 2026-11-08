@@ -1,0 +1,26 @@
+[project]
+name = "nso-bulletin"
+version = "0.1.0"
+type = "project"
+
+[dependencies]
+R = ">= 4.6"
+knitr = "*"
+rmarkdown = "*"
+eurostat = "*"
+ggplot2 = "*"
+gt = "*"
+"brand.yml" = "*"
+prismatic = "*"
+sf = "*"
+giscoR = "*"
+scales = "*"
+systemfonts = "*"
+ragg = "*"
+svglite = "*"
+marquee = "*"
+
+[dependency-groups.dev]
+webshot2 = "*"
+pdftools = "*"
+png = "*"
