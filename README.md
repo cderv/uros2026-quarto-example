@@ -40,6 +40,9 @@ quarto render      # writes _output/bulletin.html, .pdf and .docx
 Without rig, install the packages listed under `[dependencies]` in `rproj.toml` with
 `install.packages()`, then run `quarto render`.
 
+After a change to `_brand.yml`, rebuild the Word reference document with
+`Rscript brand/reference-doc.R` (it uses the packages of the `dev` group in `rproj.toml`).
+
 Optional: `quarto install verapdf` to have the PDF checked against PDF/A and PDF/UA at each render.
 
 On Linux, the map needs the system libraries of sf (GDAL, GEOS, PROJ, udunits).
@@ -53,6 +56,8 @@ The first render downloads the data from Eurostat and the fonts from Google Font
 | `_quarto.yml` | Formats (HTML, Typst PDF, Word) and their options |
 | `_brand.yml` | The institute's colours, logo and fonts, read by every format |
 | `brand/` | Logo, extra HTML styling, Typst page layout |
+| `brand/nso-reference.docx` | Word styles, logo and page: `_brand.yml` does not reach Word, so `brand/reference-doc.R` builds this file from it |
+| `brand/gt-word.R`, `brand/docx.lua` | Word only: gt tables Word can lay out, and the key figure's box |
 | `rproj.toml`, `rproj.lock` | R packages (rig project) |
 
 Data: Eurostat, reused under the [Eurostat copyright and licence policy](https://ec.europa.eu/eurostat/about-us/policies/copyright) (CC BY 4.0). Code: MIT, see `LICENSE`.

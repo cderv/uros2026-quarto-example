@@ -29,6 +29,9 @@ library(brand.yml)
 library(marquee)
 library(systemfonts)
 
+# gt tables in Word: see the file for why
+source("brand/gt-word.R")
+
 nights <- get_eurostat("tour_occ_nim",
   filters = list(geo = "EU27_2020", unit = "NR",
                  nace_r2 = "I551-I553", c_resid = "TOTAL"))

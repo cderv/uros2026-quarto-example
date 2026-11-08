@@ -38,7 +38,14 @@ format:
     margin-geometry:
       inner: {far: 1.8cm, width: 0cm, separation: 0cm}
       outer: {far: 1.2cm, width: 4.6cm, separation: 0.8cm}
-  docx: default
+  docx:
+    # _brand.yml does not reach Word: styles, logo and page come from a
+    # reference document built from it by brand/reference-doc.R
+    reference-doc: brand/nso-reference.docx
+    filters:
+      # after Quarto has made the key figure a one-cell table
+      - at: post-render
+        path: brand/docx.lua
 
 crossref:
   custom:

@@ -81,6 +81,14 @@ constraint = "*"
 name = "webshot2"
 constraint = "*"
 
+[[targets.direct_dependencies]]
+name = "xml2"
+constraint = "*"
+
+[[targets.direct_dependencies]]
+name = "zip"
+constraint = "*"
+
 [[targets.packages]]
 package = "stringi"
 version = "1.8.9"
@@ -484,7 +492,10 @@ dependencies = [
 ]
 sources = ["https://p3m.dev/cran/2026-06-23/bin/macosx/sonoma-arm64/contrib/4.6/xml2_1.6.0.tgz"]
 target = "bin/macosx/sonoma-arm64/4.6/xml2_1.6.0-f431ab66.tgz"
-groups = ["main"]
+groups = [
+    "dev",
+    "main",
+]
 metadata = { RemoteHash = "b0660edab0a839866a0cccd44721c54d497000fd6577a25106a33280318bf579" }
 
 [[targets.packages]]
@@ -642,11 +653,11 @@ metadata = { RemoteHash = "73f063f15c6334d769202a178f7dd5499bdd10044a4ffbef571be
 [[targets.packages]]
 package = "ISOweek"
 version = "0.6-2"
-binary = false
-platform = "source"
+binary = true
+platform = "aarch64-apple-darwin"
 dependencies = ["stringr"]
-sources = ["https://p3m.dev/cran/2017-10-10/src/contrib/ISOweek_0.6-2.tar.gz"]
-target = "src/ISOweek_0.6-2-31589c02.tar.gz"
+sources = ["https://p3m.dev/cran/2017-10-10/bin/macosx/sonoma-arm64/contrib/4.6/ISOweek_0.6-2.tgz"]
+target = "bin/macosx/sonoma-arm64/4.6/ISOweek_0.6-2-31589c02.tgz"
 groups = ["main"]
 metadata = { RemoteHash = "b58a37b61ee772ea2704d510e9fce69dea4dd641b45124d566242825df4530b8" }
 
@@ -1996,6 +2007,14 @@ constraint = "*"
 name = "webshot2"
 constraint = "*"
 
+[[targets.direct_dependencies]]
+name = "xml2"
+constraint = "*"
+
+[[targets.direct_dependencies]]
+name = "zip"
+constraint = "*"
+
 [[targets.packages]]
 package = "stringi"
 version = "1.8.9"
@@ -2402,7 +2421,10 @@ dependencies = [
 ]
 sources = ["https://p3m.dev/cran/2026-06-23/src/contrib/xml2_1.6.0.tar.gz"]
 target = "src/xml2_1.6.0-f431ab66.tar.gz"
-groups = ["main"]
+groups = [
+    "dev",
+    "main",
+]
 system_requirements = "libxml2: libxml2-dev (deb), libxml2-devel (rpm)"
 metadata = { RemoteHash = "b0660edab0a839866a0cccd44721c54d497000fd6577a25106a33280318bf579" }
 
@@ -3936,6 +3958,14 @@ constraint = "*"
 name = "webshot2"
 constraint = "*"
 
+[[targets.direct_dependencies]]
+name = "xml2"
+constraint = "*"
+
+[[targets.direct_dependencies]]
+name = "zip"
+constraint = "*"
+
 [[targets.packages]]
 package = "stringi"
 version = "1.8.9"
@@ -4339,7 +4369,10 @@ dependencies = [
 ]
 sources = ["https://p3m.dev/cran/2026-06-23/bin/linux/manylinux_2_28-x86_64/4.6/src/contrib/xml2_1.6.0.tar.gz"]
 target = "bin/linux/manylinux_2_28-x86_64/4.6/xml2_1.6.0-f431ab66.tar.gz"
-groups = ["main"]
+groups = [
+    "dev",
+    "main",
+]
 metadata = { RemoteHash = "b0660edab0a839866a0cccd44721c54d497000fd6577a25106a33280318bf579" }
 
 [[targets.packages]]
@@ -4497,11 +4530,11 @@ metadata = { RemoteHash = "73f063f15c6334d769202a178f7dd5499bdd10044a4ffbef571be
 [[targets.packages]]
 package = "ISOweek"
 version = "0.6-2"
-binary = false
-platform = "source"
+binary = true
+platform = "x86_64-unknown-linux-gnu"
 dependencies = ["stringr"]
-sources = ["https://p3m.dev/cran/2017-10-10/src/contrib/ISOweek_0.6-2.tar.gz"]
-target = "src/ISOweek_0.6-2-31589c02.tar.gz"
+sources = ["https://p3m.dev/cran/2017-10-10/bin/linux/manylinux_2_28-x86_64/4.6/src/contrib/ISOweek_0.6-2.tar.gz"]
+target = "bin/linux/manylinux_2_28-x86_64/4.6/ISOweek_0.6-2-31589c02.tar.gz"
 groups = ["main"]
 metadata = { RemoteHash = "b58a37b61ee772ea2704d510e9fce69dea4dd641b45124d566242825df4530b8" }
 
@@ -5851,6 +5884,14 @@ constraint = "*"
 name = "webshot2"
 constraint = "*"
 
+[[targets.direct_dependencies]]
+name = "xml2"
+constraint = "*"
+
+[[targets.direct_dependencies]]
+name = "zip"
+constraint = "*"
+
 [[targets.packages]]
 package = "stringi"
 version = "1.8.9"
@@ -6257,7 +6298,10 @@ dependencies = [
 ]
 sources = ["https://p3m.dev/cran/2026-06-23/bin/linux/noble-x86_64/4.6/src/contrib/xml2_1.6.0.tar.gz"]
 target = "bin/linux/noble-x86_64/4.6/xml2_1.6.0-f431ab66.tar.gz"
-groups = ["main"]
+groups = [
+    "dev",
+    "main",
+]
 system_requirements = "libxml2: libxml2-dev (deb), libxml2-devel (rpm)"
 metadata = { RemoteHash = "b0660edab0a839866a0cccd44721c54d497000fd6577a25106a33280318bf579" }
 
@@ -7791,6 +7835,14 @@ constraint = "*"
 name = "webshot2"
 constraint = "*"
 
+[[targets.direct_dependencies]]
+name = "xml2"
+constraint = "*"
+
+[[targets.direct_dependencies]]
+name = "zip"
+constraint = "*"
+
 [[targets.packages]]
 package = "stringi"
 version = "1.8.9"
@@ -8194,7 +8246,10 @@ dependencies = [
 ]
 sources = ["https://p3m.dev/cran/2026-06-23/bin/windows/contrib/4.6/xml2_1.6.0.zip"]
 target = "bin/windows/4.6/xml2_1.6.0-f431ab66.zip"
-groups = ["main"]
+groups = [
+    "dev",
+    "main",
+]
 metadata = { RemoteHash = "b0660edab0a839866a0cccd44721c54d497000fd6577a25106a33280318bf579" }
 
 [[targets.packages]]
