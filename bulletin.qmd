@@ -83,12 +83,12 @@ trend_headline <- paste(month, if (record) "set a new record" else "stayed below
 ```
 
 ::: {#kf-nights}
-[`r millions(latest$values)`]{style="font-size: 2.4em; font-weight: bold; color: #7a1f3d;"}
+[`{r} millions(latest$values)`]{style="font-size: 2.4em; font-weight: bold; color: #7a1f3d;"}
 
-nights spent at tourist accommodation in the EU in `r month`,
-[`r pct(change)`]{style="font-weight: bold;"} compared with a year earlier.
+nights spent at tourist accommodation in the EU in `{r} month`,
+[`{r} pct(change)`]{style="font-weight: bold;"} compared with a year earlier.
 
-Nights in the EU, `r month`
+Nights in the EU, `{r} month`
 :::
 
 ::: {.column-margin}
@@ -99,7 +99,7 @@ country of residence.
 
 ## The EU as a whole {#sec-eu}
 
-`r if (record) paste("No month on record had more nights than", month) else paste(month, "stayed below the record")`.
+`{r} if (record) paste("No month on record had more nights than", month) else paste(month, "stayed below the record")`.
 @fig-trend compares this year with the four previous years;
 @sec-countries looks at each country and @sec-methods explains the figures.
 
@@ -174,8 +174,8 @@ bottom <- tab[nrow(tab), ]
 ```
 
 @tbl-countries ranks the largest destinations by their change over the year:
-`r top$Country` recorded the strongest change (`r pct(top$change / 100)`) and
-`r bottom$Country` the weakest (`r pct(bottom$change / 100)`).
+`{r} top$Country` recorded the strongest change (`{r} pct(top$change / 100)`) and
+`{r} bottom$Country` the weakest (`{r} pct(bottom$change / 100)`).
 @fig-map shows every country with data.
 
 ```{r}
@@ -267,14 +267,14 @@ ggplot(europe) +
 **Data.** All figures come from the Eurostat dataset *Nights spent at tourist
 accommodation establishments, monthly data* (`tour_occ_nim`), read with the R
 package eurostat when this bulletin was produced, on
-`r trimws(format(Sys.Date(), "%e %B %Y"))`. They cover hotels, holiday accommodation and
+`{r} trimws(format(Sys.Date(), "%e %B %Y"))`. They cover hotels, holiday accommodation and
 campsites (NACE I55.1 to I55.3) and guests of every country of residence.
 Recent months are provisional and can be revised.
 
 **Comparisons.** Each month is compared with the same month a year earlier, which
 removes the seasonal pattern without any adjustment. In @fig-trend, the band shows
-the lowest and highest value of each month over `r this_year - 4` to
-`r this_year - 1`; earlier years are left out because of the Covid-19 pandemic.
+the lowest and highest value of each month over `{r} this_year - 4` to
+`{r} this_year - 1`; earlier years are left out because of the Covid-19 pandemic.
 
 **Classes of change.** @tbl-countries and @fig-map share five classes of yearly
 change, in %: below -2, -2 to 0, 0 to 2, 2 to 5, and 5 or more.
