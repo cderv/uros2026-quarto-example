@@ -36,3 +36,18 @@ figure.quarto-float-kf {
   min-height: 24px;
   line-height: 24px;
 }
+
+// Phones and tablets: formats and source under the title metadata (the sidebar is hidden)
+.nso-small-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 24px;
+  }
+}
