@@ -29,6 +29,9 @@ library(brand.yml)
 library(marquee)
 library(systemfonts)
 
+# Month names in English whatever the language of the machine
+invisible(Sys.setlocale("LC_TIME", "C"))
+
 # gt tables in Word: see the file for why
 source("brand/gt-word.R")
 
