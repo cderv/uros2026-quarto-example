@@ -55,6 +55,18 @@ each render.
 On Linux, the map needs the system libraries of sf (GDAL, GEOS, PROJ, udunits).
 The first render downloads the data from Eurostat and the fonts from Google Fonts.
 
+## Publish it
+
+The rendered outputs are served by GitHub Pages from the `gh-pages` branch.
+Publishing is manual: a push to `main` does not update the site.
+With veraPDF installed (see above), so that the PDF is checked, run:
+
+```bash
+quarto publish gh-pages --no-prompt
+```
+
+It renders the project, then pushes `_output/` to `gh-pages`.
+
 ## Files
 
 | File                                | Role                                                                                                              |
