@@ -18,6 +18,10 @@ format:
         icon: file-pdf
       # One plain format name is needed, or Quarto adds every format again
       - docx
+    code-links:
+      - text: Source on GitHub
+        icon: github
+        href: https://github.com/cderv/uros2026-quarto-example
     embed-resources: false
     # Formatted "cite as" entry breaks the list role axe checks (Quarto 1.12)
     appendix-cite-as: bibtex
