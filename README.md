@@ -62,10 +62,10 @@ Publishing is manual: a push to `main` does not update the site.
 With veraPDF installed (see above), so that the PDF is checked, run:
 
 ```bash
-quarto publish gh-pages --no-prompt
+quarto publish gh-pages bulletin.qmd --no-prompt
 ```
 
-It renders the project, then pushes `_output/` to `gh-pages`.
+It renders the HTML, PDF and Word outputs, then pushes them to `gh-pages`.
 
 ## Files
 
