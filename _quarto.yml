@@ -59,7 +59,7 @@ crossref:
       caption-prefix: Key figure
 
 number-sections: true
-date-format: "D MMMM YYYY"
+date-format: D MMMM YYYY
 
 fig-cap-location: top
 tbl-cap-location: top

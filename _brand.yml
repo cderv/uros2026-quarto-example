@@ -10,7 +10,9 @@ logo:
   images:
     mark:
       path: brand/nso-mark.svg
-      alt: Northbridge Statistical Office logo, three gold bars on a burgundy square
+      alt: >-
+        Northbridge Statistical Office logo, three gold bars on a burgundy
+        square
     full:
       path: brand/nso-logo.svg
       alt: Northbridge Statistical Office
