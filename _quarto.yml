@@ -19,6 +19,10 @@ format:
       # One plain format name is needed, or Quarto adds every format again
       - docx
     embed-resources: false
+    # Formatted "cite as" entry breaks the list role axe checks (Quarto 1.12)
+    appendix-cite-as: bibtex
+    # Accessibility check with axe-core when the page opens (browser console)
+    axe: true
   typst:
     knitr:
       opts_chunk:

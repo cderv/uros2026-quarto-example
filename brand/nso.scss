@@ -29,3 +29,10 @@ figure.quarto-float-kf {
   .title { color: $brand-burgundy; }
   .subtitle { color: $brand-slate; }
 }
+
+// "Other Formats" links: 24px targets for WCAG 2.2 (2.5.8 target size)
+.quarto-alternate-formats a {
+  display: inline-block;
+  min-height: 24px;
+  line-height: 24px;
+}
