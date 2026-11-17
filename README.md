@@ -8,6 +8,8 @@ One source file, `bulletin.qmd`, renders a monthly statistical bulletin to HTML,
 Word.
 The data are real (Eurostat, `tour_occ_nim`: nights spent at tourist accommodation).
 The publisher, the *Northbridge Statistical Office*, is fictional.
+The bulletin, its R code and this repository were written for this talk with the help of
+an AI coding assistant (Claude), directed and reviewed by the author.
 
 Rendered outputs: <https://cderv.github.io/uros2026-quarto-example/>
 
